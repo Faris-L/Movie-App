@@ -1,17 +1,14 @@
 import { Routes, Route } from "react-router-dom";
 import PageLayout from "./Components/PageLayout/pagelayout";
+import AboutUs from "./Pages/AboutUs/aboutus";
 
-// ... ostale stranice
 function App() {
   return (
-    <div>
-      <PageLayout/>
-    </div>
-    // <Routes>
-    //   <Route element={<PageLayout />}>
-    //     <Route path="/" element={<Home />} />
-    //   </Route>
-    // </Routes>
+    <Routes>
+      <Route element={<PageLayout />}>
+        <Route path="/" element={<AboutUs />} />
+      </Route>
+    </Routes>
   );
 }
 
