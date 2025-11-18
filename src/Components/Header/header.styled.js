@@ -9,14 +9,7 @@ export const HeaderContainer = styled.header`
   justify-content: space-between;
   gap: 24px;
   background: transparent;
-  /* background: linear-gradient(
-    180deg,
-    rgba(2, 10, 22, 0.98),
-    rgba(2, 10, 22, 0.9)
-  );
-  border-bottom: 1px solid rgba(79, 127, 194, 0.4); */
   backdrop-filter: blur(10px);
-
   position: sticky;
   top: 0;
   z-index: 100;
@@ -51,10 +44,6 @@ export const Title = styled.h1`
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #e5e7eb;
-
-  span {
-    color: #1f4a85ff;
-  }
 `;
 
 export const Nav = styled.nav`
@@ -72,7 +61,7 @@ export const Nav = styled.nav`
 export const StyledNavLink = styled(NavLink)`
   font-size: 0.95rem;
   text-decoration: none;
-  color: #ffffffff;
+  color: #ffffff;
   opacity: 0.8;
   transition: 0.2s ease;
   padding-bottom: 4px;
@@ -96,18 +85,15 @@ export const RightSide = styled.div`
   gap: 12px;
 `;
 
-export const LoginButton = styled.button`
+export const LoginButton = styled(NavLink)`
   padding: 8px 18px;
-  border-radius: 999px;
   border: none;
+  border-radius: 8px;
+  background-color: #1e3a70;
+  color: white;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 0.95rem;
   text-decoration: none;
-  font-weight: 600;
-  background: linear-gradient(135deg, #3a65a3, #4f7fc2);
-  color: #f9fafb;
-  box-shadow: 0 0 15px rgba(79, 127, 194, 0.5);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
 
   &:hover {
     transform: translateY(-1px);
@@ -120,3 +106,5 @@ export const LoginButton = styled.button`
     box-shadow: 0 0 10px rgba(79, 127, 194, 0.5);
   }
 `;
+
+export const ProfileButton = styled(LoginButton)``;

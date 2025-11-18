@@ -33,7 +33,7 @@ const Footer = () => {
             <FooterLink as={NavLink} to="/">Home</FooterLink>
             <FooterLink as={NavLink} to="/movies">Movies</FooterLink>
             <FooterLink as={NavLink} to="/tv">TV Shows</FooterLink>
-            <FooterLink as={NavLink} to="/genres">Genres</FooterLink>
+            <FooterLink as={NavLink} to="/genres">Series</FooterLink>
           </Column>
 
           <Column>

@@ -1,6 +1,3 @@
-
-
-import { NavLink } from "react-router-dom";
 import {
   HeaderContainer,
   Brand,
@@ -10,9 +7,10 @@ import {
   StyledNavLink,
   RightSide,
   LoginButton,
+  ProfileButton,
 } from "./header.styled";
 
-const Header = () => {
+const Header = ({ user }) => {
   return (
     <HeaderContainer>
       <Brand>
@@ -24,17 +22,16 @@ const Header = () => {
         <StyledNavLink to="/">Home</StyledNavLink>
         <StyledNavLink to="/movies">Movies</StyledNavLink>
         <StyledNavLink to="/tv">TV Shows</StyledNavLink>
-        <StyledNavLink to="/genres">Genres</StyledNavLink>
-        <StyledNavLink to="/favorites">Favorites</StyledNavLink>
         <StyledNavLink to="/watchlist">Watchlist</StyledNavLink>
-        <StyledNavLink to="/profile">Profile</StyledNavLink>
         <StyledNavLink to="/about">About us</StyledNavLink>
       </Nav>
 
       <RightSide>
-        <LoginButton as={NavLink} to="/login">
-          Log in
-        </LoginButton>
+        {!user ? (
+          <LoginButton to="/login">Log in</LoginButton>
+        ) : (
+          <ProfileButton to="/profile">{user.username}</ProfileButton>
+        )}
       </RightSide>
     </HeaderContainer>
   );
