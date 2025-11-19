@@ -1,4 +1,3 @@
-// src/Pages/Login/Login.jsx
 import { useState } from "react";
 import {
   LoginWrapper,
@@ -8,10 +7,11 @@ import {
   FormLabel,
   CheckboxLabel,
   CheckboxInput,
-} from "./login.styled";
+} from "./LogIn.styled";
 import { useNavigate } from "react-router-dom";
+import { showNotification } from "../../Components/Notifications/Notifications";
 
-export default function Login() {
+const Login = ({ setUser }) => {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
@@ -26,7 +26,6 @@ export default function Login() {
     e.preventDefault();
     setError("");
 
-    // Validation
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -42,12 +41,20 @@ export default function Login() {
       return;
     }
 
-    // Store user in localStorage
-    const user = { username, email, dob };
+    const user = { username, email, dob, password };
     localStorage.setItem("user", JSON.stringify(user));
 
-    // Redirect to home or refresh header
-    navigate("/");
+    setUser(user);
+     
+
+
+showNotification({
+  title: "Logged in!",
+  message: `Welcome to Blueflix, ${user.username}!`,
+  color: "green",
+});
+
+navigate("/profile");
   };
 
   return (
@@ -55,43 +62,20 @@ export default function Login() {
       <LoginTitle>Login / Register</LoginTitle>
 
       <form onSubmit={handleLogin}>
-        <FormLabel>Username</FormLabel>
-        <Input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
+        <FormLabel>Username*</FormLabel>
+        <Input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
 
         <FormLabel>Email</FormLabel>
-        <Input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
-        <FormLabel>Password</FormLabel>
-        <Input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <FormLabel>Password*</FormLabel>
+        <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
-        <FormLabel>Confirm Password</FormLabel>
-        <Input
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
+        <FormLabel>Confirm Password*</FormLabel>
+        <Input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
 
         <FormLabel>Date of Birth</FormLabel>
-        <Input
-          type="date"
-          value={dob}
-          onChange={(e) => setDob(e.target.value)}
-        />
+        <Input type="date" value={dob} onChange={(e) => setDob(e.target.value)} />
 
         <CheckboxLabel>
           <CheckboxInput
@@ -100,19 +84,16 @@ export default function Login() {
             onChange={(e) => setTermsChecked(e.target.checked)}
           />
           By logging in you agree to our{" "}
-          <a
-            href="https://www.example.com/terms"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href="https://www.example.com/terms" target="_blank" rel="noopener noreferrer">
             Terms of Service
           </a>
         </CheckboxLabel>
-
+        <h6>* checks are required</h6>
         {error && <p style={{ color: "red" }}>{error}</p>}
-
         <LoginButton type="submit">Log in</LoginButton>
       </form>
     </LoginWrapper>
   );
-}
+};
+
+export default Login;
