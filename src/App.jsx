@@ -5,8 +5,7 @@ import Movies from "./Pages/Movies/Movies";
 import Login from "./Pages/Login/LogIn";
 import Profile from "./Pages/Profile/Profile";
 import AboutUs from "./Pages/AboutUs/AboutUs";
-import Info from "./Pages/Info/Info";
-import { showNotification } from "./Components/Notifications/Notifications";
+import Home from "./Pages/Home/home";
 
 const App = () => {
   const [user, setUser] = useState(() => {
@@ -18,7 +17,8 @@ const App = () => {
     <>
       <Header user={user} setUser={setUser} />
       <Routes>
-        <Route path="/" element={<AboutUs />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<AboutUs />} />
         <Route path="/movies" element={<Movies />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
