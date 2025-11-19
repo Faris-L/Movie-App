@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Header from "./Components/Header/Header";
 import Movies from "./Pages/Movies/Movies";
@@ -7,16 +7,11 @@ import Profile from "./Pages/Profile/Profile";
 import AboutUs from "./Pages/AboutUs/AboutUs";
 import Home from "./Pages/Home/home";
 
-function App() {
+const App = () => {
   const [user, setUser] = useState(() => {
     const stored = localStorage.getItem("user");
     return stored ? JSON.parse(stored) : null;
   });
-
-  useEffect(() => {
-    if (user) localStorage.setItem("user", JSON.stringify(user));
-    else localStorage.removeItem("user");
-  }, [user]);
 
   return (
     <>
@@ -27,9 +22,10 @@ function App() {
         <Route path="/movies" element={<Movies />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
+        <Route path="/info" element={<Info />} />
       </Routes>
     </>
   );
-}
+};
 
 export default App;

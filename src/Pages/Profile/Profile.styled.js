@@ -12,6 +12,13 @@ export const ProfileHeader = styled.div`
   gap: 10px;
 `;
 
+export const OptionsRow = styled.div`
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+`;
+
+
 export const Greeting = styled.h2`
   font-size: 2rem;
   margin-bottom: 20px;
