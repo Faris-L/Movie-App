@@ -1,14 +1,32 @@
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import PageLayout from "./Components/PageLayout/pagelayout";
-import AboutUs from "./Pages/AboutUs/aboutus";
+import Header from "./Components/Header/Header";
+import Movies from "./Pages/Movies/Movies";
+import Login from "./Pages/Login/LogIn";
+import Profile from "./Pages/Profile/Profile";
+import AboutUs from "./Pages/AboutUs/AboutUs";
 
 function App() {
+  const [user, setUser] = useState(() => {
+    const stored = localStorage.getItem("user");
+    return stored ? JSON.parse(stored) : null;
+  });
+
+  useEffect(() => {
+    if (user) localStorage.setItem("user", JSON.stringify(user));
+    else localStorage.removeItem("user");
+  }, [user]);
+
   return (
-    <Routes>
-      <Route element={<PageLayout />}>
+    <>
+      <Header user={user} setUser={setUser} />
+      <Routes>
         <Route path="/" element={<AboutUs />} />
-      </Route>
-    </Routes>
+        <Route path="/movies" element={<Movies />} />
+        <Route path="/login" element={<Login setUser={setUser} />} />
+        <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
+      </Routes>
+    </>
   );
 }
 
