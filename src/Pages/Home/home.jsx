@@ -1,8 +1,11 @@
-// src/Pages/Home/Home.jsx
 import { useEffect, useState } from "react";
 import HeroSlider from "../../Components/HeroSlider/heroslider";
 import { getTrending } from "../../Service/search";
-import { HomeDiv } from "./home.styled";
+import { discoverMovies } from "../../Service/movie";
+import { discoverTv } from "../../Service/tv";
+import FaqSection from "../../Components/Faq/faq";
+import { HomeDiv, Wrapper } from "./home.styled";
+import MediaSection from "../../Components/categorylist/categorylist";
 
 const Home = () => {
   const [trending, setTrending] = useState([]);
@@ -38,6 +41,33 @@ const Home = () => {
   return (
     <HomeDiv>
       <HeroSlider items={trending} />
+
+      <Wrapper>
+        <MediaSection
+          title="Action Movies"
+          mediaType="movie"
+          queryKey={["movies-genre-28"]}
+          queryFn={() => discoverMovies({ genreId: 28 })}
+          getName={(item) => item.title}
+        />
+
+        <MediaSection
+          title="Comedy Movies"
+          mediaType="movie"
+          queryKey={["movies-genre-35"]}
+          queryFn={() => discoverMovies({ genreId: 35 })}
+          getName={(item) => item.title}
+        />
+
+        <MediaSection
+          title="Drama TV Shows"
+          mediaType="tv"
+          queryKey={["tv-genre-18"]}
+          queryFn={() => discoverTv({ genreId: 18 })}
+          getName={(item) => item.name || item.original_name}
+        />
+      </Wrapper>
+      <FaqSection />
     </HomeDiv>
   );
 };

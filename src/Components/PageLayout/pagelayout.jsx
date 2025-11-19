@@ -3,12 +3,12 @@ import Footer from "../Footer/footer";
 import { Outlet } from "react-router-dom";
 import { AppWrapper, Main } from "./pagelayout.styled";
 
-const PageLayout = () => {
+const PageLayout = ({ user, setUser }) => {
   return (
     <AppWrapper>
-      <Header />
+      <Header user={user} setUser={setUser} />
       <Main>
-        <Outlet />
+        <Outlet context={{ user, setUser }} />
       </Main>
       <Footer />
     </AppWrapper>

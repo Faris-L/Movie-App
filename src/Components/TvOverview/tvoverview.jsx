@@ -1,9 +1,8 @@
 import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-import { getMovieGenres, discoverMovies } from "../../Service/movie.js";
+import { getTvGenres, discoverTv } from "../../Service/tv.js";
 import { getPosterUrl } from "../../Service/api.js";
-
+import { useNavigate } from "react-router-dom";
 import SearchBar from "../SearchBox/SearchBar";
 
 import {
@@ -16,37 +15,39 @@ import {
   MovieCard,
   MovieImage,
   MovieName,
-} from "./MovieOverview.styled";
+} from "./tvoverwiev.styled.js"; 
 
-export default function MovieOverview() {
+export default function TvOverview() {
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const { data: genres } = useQuery({
-    queryKey: ["movie-genres"],
-    queryFn: () => getMovieGenres(),
+    queryKey: ["tv-genres"],
+    queryFn: () => getTvGenres(),
   });
 
-  const { data: genreMovies, isLoading } = useQuery({
-    queryKey: ["genre-movies", selectedGenre],
-    queryFn: () => discoverMovies({ genreId: selectedGenre }),
+  const { data: genreShows, isLoading } = useQuery({
+    queryKey: ["tv-genre-shows", selectedGenre],
+    queryFn: () => discoverTv({ genreId: selectedGenre }),
     enabled: !!selectedGenre,
   });
 
-  const movies = genreMovies?.results || [];
+  const shows = genreShows?.results || [];
 
-  const filteredMovies = useMemo(() => {
+  const filteredShows = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return movies;
-    return movies.filter((m) =>
-      m.title?.toLowerCase().includes(q)
+    if (!q) return shows;
+    return shows.filter((s) =>
+      (s.name || s.original_name || "")
+        .toLowerCase()
+        .includes(q)
     );
-  }, [movies, search]);
+  }, [shows, search]);
 
   return (
     <Wrapper>
       <Section>
-        <SectionTitle>Movie Genres</SectionTitle>
+        <SectionTitle>TV Show Genres</SectionTitle>
 
         <GenresGrid>
           {genres?.map((g) => (
@@ -54,7 +55,7 @@ export default function MovieOverview() {
               key={g.id}
               onClick={() => {
                 setSelectedGenre(g.id);
-                setSearch("");       
+                setSearch("");
               }}
               className={g.id === selectedGenre ? "active" : ""}
             >
@@ -67,27 +68,27 @@ export default function MovieOverview() {
       {selectedGenre && (
         <Section>
           <SectionTitle>
-            Movies in {genres.find((g) => g.id === selectedGenre)?.name}
+            TV Shows in {genres.find((g) => g.id === selectedGenre)?.name}
           </SectionTitle>
 
           <SearchBar
             value={search}
             onChange={setSearch}
-            placeholder="Search movies by title..."
+            placeholder="Search TV shows..."
           />
 
           {isLoading && <p>Loading…</p>}
 
           <MoviesGrid>
-            {filteredMovies.map((movie) => (
+            {filteredShows.map((show) => (
               <MovieCard 
-               key={movie.id}
-               onClick={() => navigate(`/media/movie/${movie.id}`)}>
+               key={show.id}
+               onClick={() => navigate(`/media/tv/${show.id}`)} >
                 <MovieImage
-                  src={getPosterUrl(movie.poster_path)}
-                  alt={movie.title}
+                  src={getPosterUrl(show.poster_path)}
+                  alt={show.name || show.original_name}
                 />
-                <MovieName>{movie.title}</MovieName>
+                <MovieName>{show.name || show.original_name}</MovieName>
               </MovieCard>
             ))}
           </MoviesGrid>

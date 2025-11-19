@@ -16,13 +16,12 @@ export async function getTopRatedMovies(page = 1) {
 export async function getMovieDetails(id) {
   const { data } = await tmdbApi.get(`/movie/${id}`, {
     params: {
-      append_to_response: "credits,recommendations,images",
+      append_to_response: "videos,credits,recommendations,images",
       include_image_language: "en,null",
     },
   });
   return data; 
 }
-
 
 export async function getMovieGenres() {
   const { data } = await tmdbApi.get("/genre/movie/list");

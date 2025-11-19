@@ -16,13 +16,12 @@ export async function getTopRatedTv(page = 1) {
 export async function getTvDetails(id) {
   const { data } = await tmdbApi.get(`/tv/${id}`, {
     params: {
-      append_to_response: "credits,recommendations,images",
+      append_to_response: "videos,credits,recommendations,images",
       include_image_language: "en,null",
     },
   });
   return data;
 }
-
 
 export async function getTvGenres() {
   const { data } = await tmdbApi.get("/genre/tv/list");

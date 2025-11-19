@@ -32,9 +32,13 @@ const HeroSlider = ({ items = [] }) => {
   const current = items[safeIndex];
 
   const isTv =
-    current.media_type === "tv" ||
-    (!!current.first_air_date && !current.release_date);
+  current.media_type === "tv" ||
+  (!!current.first_air_date && !current.release_date);
 
+  const detailsLink = isTv
+    ? `/media/tv/${current.id}`
+    : `/media/movie/${current.id}`;
+    
   const bgImage = getBackdropUrl(
     current.backdrop_path || current.poster_path
   );
@@ -51,7 +55,6 @@ const HeroSlider = ({ items = [] }) => {
   const next = () => setIndex((prev) => prev + 1);
   const prev = () => setIndex((prev) => prev - 1);
 
-  const detailsLink = isTv ? `/tv/${current.id}` : `/movie/${current.id}`;
 
   return (
     <SliderWrapper>
