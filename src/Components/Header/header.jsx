@@ -23,6 +23,7 @@ const Header = ({ user }) => {
         <StyledNavLink to="/movies">Movies</StyledNavLink>
         <StyledNavLink to="/tv">TV Shows</StyledNavLink>
         <StyledNavLink to="/watchlist">Watchlist</StyledNavLink>
+        <StyledNavLink to="/info">Info</StyledNavLink>
         <StyledNavLink to="/about">About us</StyledNavLink>
       </Nav>
 

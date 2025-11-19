@@ -1,47 +1,44 @@
-// src/Pages/Login/login.styled.js
 import styled from "styled-components";
 
 export const LoginWrapper = styled.div`
   padding: 50px;
-  max-width: 450px;
-  margin: 50px auto;
-  background: rgba(255, 255, 255, 0.05);
+  width: 500px;
+  margin: 60px auto;
+  background: rgba(255, 255, 255, 0.07);
   border-radius: 12px;
   color: white;
-  text-align: center;
 `;
 
 export const LoginTitle = styled.h1`
   font-size: 2rem;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
+  text-align: center;
 `;
 
 export const FormLabel = styled.label`
   display: block;
   margin: 12px 0 5px 0;
   font-weight: 500;
-  text-align: left;
 `;
 
 export const Input = styled.input`
-  display: block;
-  width: 95%;
-  margin: 0 auto 15px auto;
-  padding: 10px;
+  width: 100%;
+  padding: 12px;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.35);
   color: white;
-  font-family: "Poppins", sans-serif;
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255);
   }
 
   &:focus {
     border-color: #2b4c80;
     outline: none;
   }
+
+  margin-bottom: 18px;
 `;
 
 export const CheckboxLabel = styled.label`
@@ -49,7 +46,8 @@ export const CheckboxLabel = styled.label`
   align-items: center;
   gap: 10px;
   font-size: 0.9rem;
-  margin-bottom: 20px;
+  margin: 10px 0 25px 0;
+
   a {
     color: #79a1f3;
     text-decoration: underline;
@@ -57,12 +55,13 @@ export const CheckboxLabel = styled.label`
 `;
 
 export const CheckboxInput = styled.input`
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
 `;
 
 export const LoginButton = styled.button`
-  padding: 12px 25px;
+  width: 100%;
+  padding: 14px;
   background: #1e3d7b;
   border: none;
   border-radius: 8px;
