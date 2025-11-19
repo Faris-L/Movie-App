@@ -19,22 +19,22 @@ import {
 export default function MovieOverview() {
   const [selectedGenre, setSelectedGenre] = useState(null);
 
-  // FETCH GENRES
+
   const { data: genres } = useQuery({
     queryKey: ["movie-genres"],
     queryFn: () => getMovieGenres(),
   });
 
-  // FETCH MOVIES BASED ON SELECTED GENRE
+
   const { data: genreMovies, isLoading } = useQuery({
     queryKey: ["genre-movies", selectedGenre],
     queryFn: () => discoverMovies({ genreId: selectedGenre }),
-    enabled: !!selectedGenre, // only run when a genre is clicked
+    enabled: !!selectedGenre, 
   });
 
   return (
     <Wrapper>
-      {/* GENRES */}
+  
       <Section>
         <SectionTitle>Movie Genres</SectionTitle>
 
@@ -51,7 +51,7 @@ export default function MovieOverview() {
         </GenresGrid>
       </Section>
 
-      {/* MOVIES FOR SELECTED GENRE */}
+
       {selectedGenre && (
         <Section>
           <SectionTitle>

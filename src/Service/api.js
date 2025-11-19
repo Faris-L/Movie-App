@@ -1,14 +1,15 @@
 import axios from "axios";
 
-const API_KEY = "37f3555f8118a7d3920e8b90c223fc1";
+const API_KEY = "d5ae292ccc0ac86b6e4d58f1adf3a9e0";
 
 export const tmdbApi = axios.create({
   baseURL: "https://api.themoviedb.org/3",
-  params: {
-    api_key: API_KEY,
-    language: "en-US",
-  },
 });
+
+tmdbApi.defaults.params = {};
+tmdbApi.defaults.params["api_key"] = API_KEY;
+tmdbApi.defaults.params["language"] = "en-US";
+
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
