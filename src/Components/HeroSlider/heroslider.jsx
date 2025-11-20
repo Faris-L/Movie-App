@@ -1,4 +1,3 @@
-// src/Components/HeroSlider/HeroSlider.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -58,7 +57,7 @@ const HeroSlider = ({ items = [] }) => {
 
   return (
     <SliderWrapper>
-      <Slide>
+      <Slide key={current.id || safeIndex}>
         <Background style={{ backgroundImage: `url(${bgImage})` }} />
         <Overlay />
 

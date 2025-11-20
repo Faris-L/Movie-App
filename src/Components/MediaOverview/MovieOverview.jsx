@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { getMovieGenres, discoverMovies } from "../../Service/movie.js";
 import { getPosterUrl } from "../../Service/api.js";
@@ -16,24 +16,44 @@ import {
   MovieCard,
   MovieImage,
   MovieName,
+  LoadMoreBtn,       
 } from "./MovieOverview.styled";
 
 export default function MovieOverview() {
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
+
   const { data: genres } = useQuery({
     queryKey: ["movie-genres"],
-    queryFn: () => getMovieGenres(),
+    queryFn: getMovieGenres,
   });
 
-  const { data: genreMovies, isLoading } = useQuery({
+  const {
+    data: genreMovies,
+    isLoading,
+    isError,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ["genre-movies", selectedGenre],
-    queryFn: () => discoverMovies({ genreId: selectedGenre }),
     enabled: !!selectedGenre,
+    queryFn: ({ pageParam = 1 }) =>
+      discoverMovies({ genreId: selectedGenre, page: pageParam }),
+    getNextPageParam: (lastPage) => {
+      if (lastPage.page < lastPage.total_pages) {
+        return lastPage.page + 1;
+      }
+      return undefined; 
+    },
   });
 
-  const movies = genreMovies?.results || [];
+  const movies = useMemo(
+    () =>
+      genreMovies?.pages.flatMap((page) => page.results) ?? [],
+    [genreMovies]
+  );
 
   const filteredMovies = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -54,7 +74,7 @@ export default function MovieOverview() {
               key={g.id}
               onClick={() => {
                 setSelectedGenre(g.id);
-                setSearch("");       
+                setSearch("");
               }}
               className={g.id === selectedGenre ? "active" : ""}
             >
@@ -76,13 +96,15 @@ export default function MovieOverview() {
             placeholder="Search movies by title..."
           />
 
-          {isLoading && <p>Loading…</p>}
+          {isLoading && !genreMovies && <p>Loading…</p>}
+          {isError && <p>Failed to load movies.</p>}
 
           <MoviesGrid>
             {filteredMovies.map((movie) => (
-              <MovieCard 
-               key={movie.id}
-               onClick={() => navigate(`/media/movie/${movie.id}`)}>
+              <MovieCard
+                key={movie.id}
+                onClick={() => navigate(`/media/movie/${movie.id}`)}
+              >
                 <MovieImage
                   src={getPosterUrl(movie.poster_path)}
                   alt={movie.title}
@@ -91,6 +113,15 @@ export default function MovieOverview() {
               </MovieCard>
             ))}
           </MoviesGrid>
+
+          {hasNextPage && (
+            <LoadMoreBtn
+              onClick={() => fetchNextPage()}
+              disabled={isFetchingNextPage}
+            >
+              {isFetchingNextPage ? "Loading..." : "Load more"}
+            </LoadMoreBtn>
+          )}
         </Section>
       )}
     </Wrapper>

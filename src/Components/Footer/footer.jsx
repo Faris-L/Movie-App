@@ -33,7 +33,6 @@ const Footer = () => {
             <FooterLink as={NavLink} to="/">Home</FooterLink>
             <FooterLink as={NavLink} to="/movies">Movies</FooterLink>
             <FooterLink as={NavLink} to="/tv">TV Shows</FooterLink>
-            <FooterLink as={NavLink} to="/genres">Series</FooterLink>
           </Column>
 
           <Column>
@@ -46,8 +45,8 @@ const Footer = () => {
           <Column>
             <ColumnTitle>Info</ColumnTitle>
             <FooterLink as={NavLink} to="/about">About us</FooterLink>
-            <FooterLink as="a" href="#">Help & Support</FooterLink>
-            <FooterLink as="a" href="#">Terms & Privacy</FooterLink>
+            <FooterLink as={NavLink}  to="/info">Help & Support</FooterLink>
+            <FooterLink as={NavLink}  to="/info">Terms & Privacy</FooterLink>
           </Column>
         </Columns>
       </FooterTop>
