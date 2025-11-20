@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { getMovieDetails } from "../../Service/movie";
 import { getTvDetails } from "../../Service/tv";
 import { getPosterUrl } from "../../Service/api";
+import { useWatchlist } from "../../Context/watchlistContext";
+
 import {
   DetailWrapper,
   DetailLayout,
@@ -22,6 +24,7 @@ import {
 export default function MediaDetails() {
   const { type, id } = useParams();
   const [showTrailer, setShowTrailer] = useState(false);
+  const { addItem, removeItem, isInWatchlist } = useWatchlist();
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["media-details", type, id],
@@ -36,14 +39,25 @@ export default function MediaDetails() {
   const runtime = type === "movie" ? data.runtime : data.episode_run_time?.[0];
   const genres = data.genres || [];
 
- const videos = data.videos?.results || [];
-
+  const videos = data.videos?.results || [];
   const trailerVideo =
     videos.find((v) => v.type === "Trailer" && v.site === "YouTube") ||
     videos.find((v) => v.type === "Teaser" && v.site === "YouTube") ||
     videos[0];
-
   const trailer = trailerVideo?.key;
+
+  const item = {
+    id: data.id,
+    title,
+    poster_path: data.poster_path,
+    type,
+  };
+  const inWatchlist = isInWatchlist(item.id);
+
+  const handleWatchlistToggle = () => {
+    if (inWatchlist) removeItem(item.id);
+    else addItem(item);
+  };
 
   return (
     <DetailWrapper>
@@ -56,15 +70,16 @@ export default function MediaDetails() {
           <Meta>
             {date && <span>{date.slice(0, 4)}</span>}
             {runtime && <span>{runtime} min</span>}
-            {data.vote_average && (
-              <span>⭐ {data.vote_average.toFixed(1)} / 10</span>
-            )}
+            {data.vote_average && <span>⭐ {data.vote_average.toFixed(1)} / 10</span>}
             <span style={{ textTransform: "uppercase" }}>{type}</span>
-             {trailer && (
-            <WatchButton onClick={() => setShowTrailer(true)}>
-              ▶ Watch Trailer
+
+            <WatchButton onClick={handleWatchlistToggle}>
+              {inWatchlist ? "✔ Added to Watchlist" : "+ Add to Watchlist"}
             </WatchButton>
-          )}
+
+            {trailer && (
+              <WatchButton onClick={() => setShowTrailer(true)}>▶ Watch Trailer</WatchButton>
+            )}
           </Meta>
 
           {genres.length > 0 && (

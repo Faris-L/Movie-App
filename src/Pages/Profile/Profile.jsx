@@ -16,10 +16,12 @@ import {
   ModalButton,
 } from "./Profile.styled";
 import { NavLink, useNavigate } from "react-router-dom";
-import { showNotification } from "../../Components/Notifications/Notifications";
+import { useNotifications } from "../../Context/notificationContext";
 
 const Profile = ({ user, setUser }) => {
   const navigate = useNavigate();
+  const { addNotification } = useNotifications();
+
   if (!user)
     return (
       <ProfileWrapper>
@@ -36,53 +38,75 @@ const Profile = ({ user, setUser }) => {
   });
   const [temp, setTemp] = useState(form);
   const [modalType, setModalType] = useState(null);
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwords, setPasswords] = useState({
+    confirmPassword: "",
+    oldPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  });
   const [error, setError] = useState("");
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
   const handleChange = (e) => setTemp({ ...temp, [e.target.name]: e.target.value });
+  const handlePasswordChange = (e) => setPasswords({ ...passwords, [e.target.name]: e.target.value });
 
-  const openSaveModal = () => { setModalType("save"); setConfirmPassword(""); setError(""); };
-  const openLogoutModal = () => { setModalType("logout"); setConfirmPassword(""); setError(""); };
-  const openChangePasswordModal = () => { setModalType("changePassword"); setOldPassword(""); setNewPassword(""); setConfirmNewPassword(""); setError(""); };
+  const openModal = (type) => {
+    setModalType(type);
+    setPasswords({
+      confirmPassword: "",
+      oldPassword: "",
+      newPassword: "",
+      confirmNewPassword: "",
+    });
+    setError("");
+  };
 
   const handleSaveChanges = () => {
-    if (confirmPassword !== user.password) { setError("Incorrect password!"); return; }
-    setForm(temp);
+    if (passwords.confirmPassword !== user.password) {
+      setError("Incorrect password!");
+      return;
+    }
     const updated = { ...user, ...temp };
     localStorage.setItem("user", JSON.stringify(updated));
     setUser(updated);
+    setForm(temp);
     setIsEditing(false);
     setModalType(null);
-    showNotification({ message: "Profile changes saved successfully!", color: "#4da6ff", type: "success" });
+    addNotification({ message: "Profile changes saved successfully!", type: "success" });
   };
 
   const handleLogout = () => {
-    if (confirmPassword !== user.password) { setError("Incorrect password!"); return; }
+    if (passwords.confirmPassword !== user.password) {
+      setError("Incorrect password!");
+      return;
+    }
     localStorage.removeItem("user");
     localStorage.removeItem("favorites");
     setUser(null);
     setModalType(null);
     navigate("/login");
-    showNotification({ message: "Logged out & account deleted!", color: "#b30000", type: "error" });
+    addNotification({ message: "Logged out & account deleted!", type: "error" });
   };
 
   const handleChangePassword = () => {
-    if (oldPassword !== user.password) { setError("Old password is incorrect!"); return; }
-    if (!newPassword || newPassword !== confirmNewPassword) { setError("New passwords do not match or are empty!"); return; }
-    const updated = { ...user, password: newPassword };
+    if (passwords.oldPassword !== user.password) {
+      setError("Old password is incorrect!");
+      return;
+    }
+    if (!passwords.newPassword || passwords.newPassword !== passwords.confirmNewPassword) {
+      setError("New passwords do not match or are empty!");
+      return;
+    }
+    const updated = { ...user, password: passwords.newPassword };
     localStorage.setItem("user", JSON.stringify(updated));
     setUser(updated);
     setModalType(null);
-    setOldPassword(""); setNewPassword(""); setConfirmNewPassword("");
-    showNotification({ message: "Password changed successfully!", color: "#003366", type: "success" });
+    setPasswords({ oldPassword: "", newPassword: "", confirmNewPassword: "", confirmPassword: "" });
+    addNotification({ message: "Password changed successfully!", type: "success" });
   };
 
   const handleCancel = () => {
     setModalType(null);
-    showNotification({ message: "Operation Cancelled!", color: "#ff6666", type: "error" });
+    addNotification({ message: "Operation cancelled!", type: "error" });
   };
 
   return (
@@ -91,20 +115,18 @@ const Profile = ({ user, setUser }) => {
         <ProfileHeader>
           <Greeting>Hello, {form.username}</Greeting>
 
-          {!isEditing && (
+          {!isEditing ? (
             <OptionsRow>
               <OptionsButton onClick={() => setIsEditing(true)}>Edit</OptionsButton>
-              <OptionsButton onClick={openChangePasswordModal}>Change Password</OptionsButton>
-              <OptionsButton onClick={openLogoutModal}>Log Out & Delete Account</OptionsButton>
+              <OptionsButton onClick={() => openModal("changePassword")}>Change Password</OptionsButton>
+              <OptionsButton onClick={() => openModal("logout")}>Log Out & Delete Account</OptionsButton>
             </OptionsRow>
-          )}
-
-          {isEditing && (
+          ) : (
             <OptionsRow>
               <OptionsButton onClick={() => { setTemp(form); setIsEditing(false); handleCancel(); }}>
                 Cancel Changes
               </OptionsButton>
-              <OptionsButton onClick={openSaveModal}>Save Changes</OptionsButton>
+              <OptionsButton onClick={() => openModal("save")}>Save Changes</OptionsButton>
             </OptionsRow>
           )}
 
@@ -132,8 +154,6 @@ const Profile = ({ user, setUser }) => {
               background:
                 modalType === "changePassword"
                   ? "rgba(30, 61, 123, 0.9)"
-                  : modalType === "logout"
-                  ? "rgba(0, 0, 0, 0.85)"
                   : "rgba(0, 0, 0, 0.85)",
             }}
           >
@@ -150,8 +170,9 @@ const Profile = ({ user, setUser }) => {
                 <ModalInput
                   type="password"
                   placeholder="Enter your password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  name="confirmPassword"
+                  value={passwords.confirmPassword}
+                  onChange={handlePasswordChange}
                 />
                 {error && <p style={{ color: "red" }}>{error}</p>}
                 <div style={{ marginTop: 10 }}>
@@ -166,8 +187,9 @@ const Profile = ({ user, setUser }) => {
                 <ModalInput
                   type="password"
                   placeholder="Enter your password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  name="confirmPassword"
+                  value={passwords.confirmPassword}
+                  onChange={handlePasswordChange}
                 />
                 {error && <p style={{ color: "red" }}>{error}</p>}
                 <div style={{ marginTop: 10 }}>
@@ -182,20 +204,23 @@ const Profile = ({ user, setUser }) => {
                 <ModalInput
                   type="password"
                   placeholder="Old Password"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
+                  name="oldPassword"
+                  value={passwords.oldPassword}
+                  onChange={handlePasswordChange}
                 />
                 <ModalInput
                   type="password"
                   placeholder="New Password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
+                  name="newPassword"
+                  value={passwords.newPassword}
+                  onChange={handlePasswordChange}
                 />
                 <ModalInput
                   type="password"
                   placeholder="Confirm New Password"
-                  value={confirmNewPassword}
-                  onChange={(e) => setConfirmNewPassword(e.target.value)}
+                  name="confirmNewPassword"
+                  value={passwords.confirmNewPassword}
+                  onChange={handlePasswordChange}
                 />
                 {error && <p style={{ color: "red" }}>{error}</p>}
                 <div style={{ marginTop: 10 }}>
