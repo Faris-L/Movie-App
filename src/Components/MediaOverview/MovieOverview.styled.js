@@ -131,3 +131,28 @@ export const MovieName = styled.p`
   color: #e5e7eb;
   line-height: 1.3;
 `;
+export const LoadMoreBtn = styled.button`
+  margin: 26px auto 4px;
+  padding: 10px 24px;
+  border-radius: 999px;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #f9fafb;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.8);
+  transition: 0.2s ease;
+  display: block;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.9);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+`;
+

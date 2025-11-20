@@ -11,6 +11,7 @@ const Home = () => {
   const [trending, setTrending] = useState([]);
   const [loading, setLoading] = useState(true);
 
+
   useEffect(() => {
     let cancelled = false;
 
@@ -67,7 +68,10 @@ const Home = () => {
           getName={(item) => item.name || item.original_name}
         />
       </Wrapper>
-      <FaqSection />
+
+      <div id="faq">
+        <FaqSection />
+      </div>
     </HomeDiv>
   );
 };

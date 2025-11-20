@@ -1,4 +1,4 @@
-import { InfoWrapper, InfoTitle, InfoSection, InfoLink } from "./Info.styled";
+import { InfoWrapper, InfoCard, InfoTitle, InfoLink } from "./Info.styled";
 import { NavLink } from "react-router-dom";
 
 const Info = () => {
@@ -6,23 +6,42 @@ const Info = () => {
     <InfoWrapper>
       <InfoTitle>Information & Help</InfoTitle>
 
-      <InfoSection>
-        <h2>Terms of Service</h2>
+      <InfoCard>
+        <h2>📄 Terms of Service</h2>
         <p>
-          This is where your Terms of Service will go. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Read our usage rules, privacy details and service limitations.  
+          Your safety and clarity are important to us.
         </p>
-        <InfoLink href="https://www.example.com/terms" target="_blank" rel="noopener noreferrer">
-          Read full Terms of Service
+        <InfoLink
+          href="https://www.example.com/terms"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View full Terms of Service →
         </InfoLink>
-      </InfoSection>
+      </InfoCard>
 
-      <InfoSection>
-        <h2>Help / Guide</h2>
+      <InfoCard>
+        <h2>🧭 User Guide</h2>
         <p>
-          Need help navigating the website? This is where your guide will go. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Learn how to navigate BlueFlix, explore content, use search filters,  
+          manage your profile and customize your experience.
         </p>
-        <NavLink to="/login">Go to Login Page</NavLink>
-      </InfoSection>
+        <NavLink to="/login" style={{ color: "#90b8ff" }}>
+          Go to Login Page →
+        </NavLink>
+      </InfoCard>
+
+      <InfoCard>
+        <h2>❓ FAQ</h2>
+        <p>
+          Have questions? Visit our quick answers section to learn more about  
+          accounts, watchlists, data sources and more.
+        </p>
+       <a href="/#faq" style={{ color: "#90b8ff" }}>
+          Open FAQ →
+        </a>
+      </InfoCard>
     </InfoWrapper>
   );
 };
