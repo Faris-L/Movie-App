@@ -12,6 +12,7 @@ import Watchlist from "./Pages/Watchlist/Watchlist"
 import MediaDetails from "./Components/MediaDetail/MediaDetails";
 import ProtectedRoute from "./Pages/protectedRoute";
 import NotFound from "./Pages/notFound"
+import RandomMovies from "./Pages/RandomMovie/RandomMovie";
 const App = () => {
   const [user, setUser] = useState(() => {
     const stored = localStorage.getItem("user");
@@ -26,13 +27,13 @@ const App = () => {
   <Route path="/about" element={<AboutUs />} />
   <Route path="*" element={<NotFound />} />
 
-  {/* Rute koje se otvaraju ako je korisnik log-inovan */}
   <Route element={<ProtectedRoute user={user} />}>
     <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
     <Route path="/watchlist" element={<Watchlist />} />
     <Route path="/media/:type/:id" element={<MediaDetails />} />
   </Route>
 
+  <Route path="/random" element={<RandomMovies />} />
   <Route path="/movies" element={<Movies />} />
   <Route path="/tv" element={<Tv />} />
   <Route path="info" element={<Info />} />
