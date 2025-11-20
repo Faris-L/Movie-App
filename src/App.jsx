@@ -8,9 +8,10 @@ import AboutUs from "./Pages/AboutUs/AboutUs";
 import Home from "./Pages/Home/home";
 import Info from "./Pages/Info/Info";
 import Tv from "./Pages/TVShows/tvshows";
+import Watchlist from "./Pages/Watchlist/Watchlist"
 import MediaDetails from "./Components/MediaDetail/MediaDetails";
-
- 
+import ProtectedRoute from "./Pages/protectedRoute";
+import NotFound from "./Pages/notFound"
 const App = () => {
   const [user, setUser] = useState(() => {
     const stored = localStorage.getItem("user");
@@ -19,21 +20,25 @@ const App = () => {
 
   return (
     <>
-      <Routes>
-        <Route element={<PageLayout user={user} setUser={setUser} />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/movies" element={<Movies />} />
-          <Route path="/login" element={<Login setUser={setUser} />} />
-          <Route
-            path="/profile"
-            element={<Profile user={user} setUser={setUser} />}
-          />
-          <Route path="/info" element={<Info />} />
-          <Route path="/tv" element={<Tv />} />
-          <Route path="/media/:type/:id" element={<MediaDetails />} />
-        </Route>
-      </Routes>
+<Routes>
+<Route element={<PageLayout user={user} setUser={setUser} />}>
+  <Route path="/" element={<Home />} />
+  <Route path="/about" element={<AboutUs />} />
+  <Route path="*" element={<NotFound />} />
+
+  {/* Rute koje se otvaraju ako je korisnik log-inovan */}
+  <Route element={<ProtectedRoute user={user} />}>
+    <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
+    <Route path="/watchlist" element={<Watchlist />} />
+    <Route path="/media/:type/:id" element={<MediaDetails />} />
+  </Route>
+
+  <Route path="/movies" element={<Movies />} />
+  <Route path="/tv" element={<Tv />} />
+  <Route path="info" element={<Info />} />
+  <Route path="/login" element={<Login setUser={setUser} />} />
+</Route>
+</Routes>
     </>
   );
 };
