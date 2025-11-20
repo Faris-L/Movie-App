@@ -20,6 +20,10 @@ export const ItemsGrid = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 1rem;
   justify-items: start;
+
+  p{
+    color: #ffffffff;
+  }
 `;
 
 export const ItemCard = styled.div`
@@ -85,12 +89,13 @@ export const FilterInput = styled.input`
   flex: 1;
   padding: 8px 12px;
   border-radius: 6px;
-  border: 1px solid #444;
-  background: #222;
+  border: 1px solid #ffffffff;
+  background: transparent;
   color: white;
 
   &:focus {
     outline: none;
     border-color: #1f6bff;
   }
+  
 `;

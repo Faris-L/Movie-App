@@ -6,6 +6,7 @@ import { discoverTv } from "../../Service/tv";
 import FaqSection from "../../Components/Faq/faq";
 import { HomeDiv, Wrapper } from "./home.styled";
 import MediaSection from "../../Components/categorylist/categorylist";
+import Recommended from "../../Components/Recomended/Recommended";
 
 const Home = () => {
   const [trending, setTrending] = useState([]);
@@ -42,7 +43,7 @@ const Home = () => {
   return (
     <HomeDiv>
       <HeroSlider items={trending} />
-
+       <Recommended /> 
       <Wrapper>
         <MediaSection
           title="Action Movies"
